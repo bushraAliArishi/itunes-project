@@ -4,44 +4,44 @@ import { SearchResult } from './search-result.entity';
 @Entity()
 export class ItunesItem {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne(() => SearchResult, (search) => search.items)
-  search: SearchResult;
+  search!: SearchResult;
 
   @Column()
-  itunesId: number;
+  itunesId!: number;
 
   @Column()
-  artistName: string;
+  artistName!: string;
 
   @Column()
-  trackName: string;
+  trackName!: string;
 
   @Column({ nullable: true })
-  collectionName: string;
+  collectionName?: string;
 
   @Column({ nullable: true })
-  previewUrl: string;
+  previewUrl?: string;
 
   @Column({ nullable: true })
-  artworkUrl: string;
+  artworkUrl?: string;
 
   @Column({ type: 'date', nullable: true })
-  releaseDate: Date;
+  releaseDate?: Date;
 
   @Column({ nullable: true })
-  primaryGenreName: string;
+  primaryGenreName?: string;
 
   @Column({ nullable: true })
-  country: string;
+  country?: string;
 
   @Column({ nullable: true, length: 3 })
-  currency: string;
+  currency?: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  price: number;
+  price?: number;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt!: Date;
 }
