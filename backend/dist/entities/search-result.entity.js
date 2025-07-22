@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:type", Date)
 ], SearchResult.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => itunes_item_entity_1.ItunesItem, item => item.search),
+    (0, typeorm_1.OneToMany)(() => itunes_item_entity_1.ItunesItem, (item) => item.search),
     __metadata("design:type", Array)
 ], SearchResult.prototype, "items", void 0);
 exports.SearchResult = SearchResult = __decorate([

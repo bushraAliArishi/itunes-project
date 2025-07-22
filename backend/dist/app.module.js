@@ -12,7 +12,8 @@ const typeorm_1 = require("@nestjs/typeorm");
 const axios_1 = require("@nestjs/axios");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const search_result_entity_1 = require("./search-result.entity");
+const search_result_entity_1 = require("./entities/search-result.entity");
+const itunes_item_entity_1 = require("./entities/itunes-item.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -27,7 +28,7 @@ exports.AppModule = AppModule = __decorate([
                 username: process.env.DB_USER || 'postgres',
                 password: process.env.DB_PASSWORD || 'admin',
                 database: process.env.DB_NAME || 'itunes-project',
-                entities: [search_result_entity_1.SearchResult],
+                entities: [search_result_entity_1.SearchResult, itunes_item_entity_1.ItunesItem],
                 synchronize: true,
             }),
             typeorm_1.TypeOrmModule.forFeature([search_result_entity_1.SearchResult]),

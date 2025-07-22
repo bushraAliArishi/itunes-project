@@ -3,7 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SearchResult } from './search-result.entity';
+import { SearchResult } from './entities/search-result.entity';
+import { ItunesItem } from './entities/itunes-item.entity';
+
 @Module({
   imports: [
     HttpModule,
@@ -14,7 +16,7 @@ import { SearchResult } from './search-result.entity';
       username: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || 'admin',
       database: process.env.DB_NAME || 'itunes-project',
-      entities: [SearchResult],
+      entities: [SearchResult, ItunesItem],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([SearchResult]),
