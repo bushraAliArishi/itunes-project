@@ -5,13 +5,12 @@ import axios from 'axios';
 const app = fastify({ logger: true });
 const pool = new pg.Pool({
   user: 'postgres',
-  password: 'admin', // Use your actual password
+  password: 'admin',
   host: 'localhost',
   port: 5432,
   database: 'itunes_search'
 });
 
-// Function to create table if not exists
 async function initializeDatabase() {
   try {
     await pool.query(`
@@ -27,28 +26,22 @@ async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('Database table created/verified successfully');
-    
-    // Verify connection with a test query
     const testRes = await pool.query('SELECT NOW()');
     console.log('Database connection verified at:', testRes.rows[0].now);
   } catch (err) {
     console.error('Database initialization error:', err);
-    process.exit(1); // Exit if we can't connect to DB
+    process.exit(1);
   }
 }
 
-// iTunes search endpoint
 app.get('/api/search', async (request, reply) => {
   const { term } = request.query as { term: string };
   
   try {
-    // 1. Search iTunes API
     const itunesResponse = await axios.get(
       `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=software`
     );
     
-    // 2. Prepare data
     const results = itunesResponse.data.results.map((result: any) => ({
       track_id: result.trackId,
       track_name: result.trackName,
@@ -59,7 +52,6 @@ app.get('/api/search', async (request, reply) => {
       user_rating_count: result.userRatingCount
     }));
     
-    // 3. Insert into database
     for (const result of results) {
       await pool.query(`
         INSERT INTO search_results (track_id, track_name, artist_name, artwork_url, genres, average_user_rating, user_rating_count)
@@ -68,7 +60,6 @@ app.get('/api/search', async (request, reply) => {
       `, Object.values(result));
     }
     
-    // 4. Return results from DB
     const dbResults = await pool.query('SELECT * FROM search_results');
     return dbResults.rows;
   } catch (error) {
@@ -77,14 +68,10 @@ app.get('/api/search', async (request, reply) => {
   }
 });
 
-// Start server
 const start = async () => {
   try {
-    // Initialize database first
     await initializeDatabase();
-    
-    // Start API server
-    await app.listen({ port: 3001 });
+    await app.listen({ port: 3001, host: '0.0.0.0' });
     console.log('API server running on http://localhost:3001');
   } catch (err) {
     console.error('Server startup error:', err);
